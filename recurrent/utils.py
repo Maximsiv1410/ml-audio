@@ -1,10 +1,9 @@
-from tensorflow import keras
-from tensorflow.python.keras.layers import LSTM
-from tensorflow.python.layers.core import Dropout, Dense
+import tensorflow
+from tensorflow.python.keras.layers import LSTM, Dropout, Dense
 
 
-def get_rnn_model(shape, n_classes: int):
-    model = keras.Sequential()
+def get_model(shape, n_classes: int):
+    model = tensorflow.keras.Sequential()
 
     #model.add(GRU(256, input_shape=shape))
     model.add(LSTM(256, input_shape=shape))

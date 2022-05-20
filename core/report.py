@@ -1,7 +1,44 @@
 import numpy as np
-from tensorflow import metrics
 from matplotlib import pyplot as plt
-from sklearn.metrics import mean_squared_error
+from sklearn import metrics
+from sklearn.metrics import confusion_matrix
+import pandas as pd
+from sklearn.metrics import classification_report
+
+
+
+
+def make_report(model, history, classes, X_train, y_train_encoded, X_test, y_test_encoded, calc_normal=True):
+    model_evaluation_report(model, X_train, y_train_encoded, X_test, y_test_encoded)
+    plot_train_history(history, x_ticks_vertical=True)
+
+    labels = [value for key, value in classes.items()]
+    numbered = [key for key, value in classes.items()]
+
+    # Predict probabilities for test set
+    y_pred = model.predict(X_test, verbose=0)
+    #Get predicted labels
+    yhat_probs = np.argmax(y_pred, axis=1)
+    # Compute confusion matrix data
+    cm = confusion_matrix(yhat_probs, y_test_encoded)
+    plot_confusion_matrix(cm, labels)
+
+
+
+    # Find per-class accuracy from the confusion matrix data
+    accuracies = acc_per_class(cm)
+    df = pd.DataFrame({
+        'CLASS': labels,
+        'ACCURACY': accuracies
+    }).sort_values(by="ACCURACY", ascending=False)
+    print(df)
+
+
+    # Build classification report
+    re = classification_report(y_test_encoded, yhat_probs, labels=numbered, target_names=labels)
+    print(re)
+
+
 
 def evaluate_model(model, X_train, y_train, X_test, y_test):
     train_score = model.evaluate(X_train, y_train, verbose=0)
