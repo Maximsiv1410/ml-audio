@@ -1,4 +1,4 @@
-import factory
+from usage import factory
 
 from core.system import get_config
 

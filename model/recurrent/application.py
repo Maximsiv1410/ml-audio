@@ -2,15 +2,12 @@ from datetime import datetime
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from tensorflow import keras
-from tensorflow.python.keras.callbacks import ModelCheckpoint
 
-import click
 import os
-import configparser
 import json
 import numpy as np
 
-from recurrent.utils import get_model
+from model.recurrent.utils import get_model
 from core.report import make_report
 
 

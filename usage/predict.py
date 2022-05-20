@@ -1,4 +1,4 @@
-import factory
+from usage import factory
 
 def do_predict(config):
     arch = ''

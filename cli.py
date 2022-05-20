@@ -1,5 +1,6 @@
 import click
-import factory
+from usage import factory
+
 
 @click.command()
 @click.option("--action",
