@@ -48,7 +48,7 @@ pip install -r requirements.txt
 
 Для обучения моделей:
 ```sh
-/bin/python cli.py --action fit --config fit.cfg
+/bin/python cli.py --action fit --config settings.cfg
 ```
 
 Для классификации конкретного сэмпла:

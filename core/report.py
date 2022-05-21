@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import numpy as np
 from matplotlib import pyplot as plt
 from sklearn import metrics
@@ -6,14 +8,22 @@ import pandas as pd
 from sklearn.metrics import classification_report
 
 
-
-
-def make_report(model, history, classes, X_train, y_train_encoded, X_test, y_test_encoded, calc_normal=True):
+def make_report(
+        tag,
+        model,
+        history,
+        classes,
+        X_train,
+        y_train_encoded,
+        X_test,
+        y_test_encoded,
+        calc_normal=True
+):
     model_evaluation_report(model, X_train, y_train_encoded, X_test, y_test_encoded)
     plot_train_history(history, x_ticks_vertical=True)
 
     labels = [value for key, value in classes.items()]
-    numbered = [key for key, value in classes.items()]
+    numbered = [int(key) for key, value in classes.items()]
 
     # Predict probabilities for test set
     y_pred = model.predict(X_test, verbose=0)
@@ -22,7 +32,6 @@ def make_report(model, history, classes, X_train, y_train_encoded, X_test, y_tes
     # Compute confusion matrix data
     cm = confusion_matrix(yhat_probs, y_test_encoded)
     plot_confusion_matrix(cm, labels)
-
 
 
     # Find per-class accuracy from the confusion matrix data
@@ -35,8 +44,15 @@ def make_report(model, history, classes, X_train, y_train_encoded, X_test, y_tes
 
 
     # Build classification report
-    re = classification_report(y_test_encoded, yhat_probs, labels=numbered, target_names=labels)
+    re = classification_report(y_test_encoded,
+                               yhat_probs,
+                               labels=numbered,
+                               target_names=labels,
+                               zero_division=0) # suppressing warnings in case of zero predicted classes
     print(re)
+
+
+    print(f'{tag}_{datetime.now()}_report')
 
 
 
@@ -77,7 +93,7 @@ def acc_per_class(np_probs_array):
     for idx in range(0, np_probs_array.shape[0]):
         correct = np_probs_array[idx][idx].astype(int)
         total = np_probs_array[idx].sum().astype(int)
-        acc = (correct / total) * 100
+        acc = 0 if total == 0 else (correct / total) * 100
         accs.append(acc)
     return accs
 

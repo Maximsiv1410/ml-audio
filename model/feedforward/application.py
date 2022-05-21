@@ -48,7 +48,7 @@ def fit_fnn(data_path, epochs=100, batch_size=32, model_path='fnn.hdf5'):
             metrics=['accuracy'],
             optimizer=keras.optimizers.Adam(1e-4))
 
-    #print(model.summary())
+    print(model.summary())
 
     start = datetime.now()
     history = model.fit(X_train,
@@ -62,7 +62,7 @@ def fit_fnn(data_path, epochs=100, batch_size=32, model_path='fnn.hdf5'):
     print("Training completed in time: ", duration)
 
     model.save(model_path)
-    make_report(model, history, classes, X_train, y_train_encoded, X_test, y_test_encoded)
+    make_report('fnn', model, history, classes, X_train, y_train_encoded, X_test, y_test_encoded)
 
 def predict_fnn():
     pass

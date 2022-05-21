@@ -72,7 +72,7 @@ def fit_cnn(data_path, epochs=100, batch_size=32, model_path='cnn.hdf5'):
     print("Training completed in time: ", duration)
 
     model.save(model_path)
-    make_report(model, history, classes, X_train, y_train_encoded, X_test, y_test_encoded)
+    make_report('cnn', model, history, classes, X_train, y_train_encoded, X_test, y_test_encoded)
 
 
 
