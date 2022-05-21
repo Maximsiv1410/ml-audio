@@ -10,7 +10,6 @@
 - Pandas - Мощный инструмент анализа данных
 - Tensorflow - Фреймворк машинного обучения
 
-
 ## Зависимости
 Для установки всех требуемых пакетов:
 ```sh
@@ -18,8 +17,9 @@ pip install -r requirements.txt
 ```
 
 ## Начало
-Необходимо внимательно ознакомиться со структурой файлов конфигурации:
-- transform.cfg
+Необходимо внимательно ознакомиться со структурой файла конфигурации.
+В нем представлены следующие секции:
+- [Transform]
     | Параметр | Назначение |
     | ------ | ------ |
     | dataset_path | Путь до директории датасета |
@@ -28,35 +28,28 @@ pip install -r requirements.txt
     | target_duration | Целевая продолжительность аудио |
     | mels | Кол-во мел-фильтров |
     | result_path | Путь до директории для сохранения |
-- fit.cfg
+- [Fit]
     | Параметр | Назначение |
     | ------ | ------ |
     | dataset_path | Путь до директории обработанного датасета |
     | arch | Используемая архитектура нейросети |
     | epochs | Количество эпох для обучения |
     | batch_size | Размер пакета для прогонки |
-- predict.cfg
+- [Predict]
     | Параметр | Назначение |
     | ------ | ------ |
     | В | Процессе |
 
 ## Запуск
-Для предобработки датасета:
-```sh
-/bin/python cli.py --action transform --config transform.cfg
-```
+Доступно три действия:
+1. transform
+2. fit
+3. predict
 
-Для обучения моделей:
+Запуск происходит следующим образом:
 ```sh
-/bin/python cli.py --action fit --config settings.cfg
+/bin/python cli.py --action <action> --config <config_path>
 ```
-
-Для классификации конкретного сэмпла:
-```sh
-/bin/python cli.py --action predict --config predict.cfg
-```
-   [@tjholowaychuk]: <http://twitter.com/tjholowaychuk>
-   [express]: <http://expressjs.com>
-   [AngularJS]: <http://angularjs.org>
-   [Gulp]: <http://gulpjs.com>
-
+# Roadmap
+В ближайшее время добавится:
+1. Генерация отчетов
