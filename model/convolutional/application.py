@@ -42,9 +42,9 @@ def fit_cnn(data_path, epochs=100, batch_size=32, model_path='cnn.hdf5'):
         model = keras.models.load_model(model_path)
     else:
         print('build from scratch')
-        shape = Shape(rows=features.shape[1],
-                      frames=features.shape[2],
-                      channels=1)
+        shape = Shape(rows=X_train.shape[1],
+                      frames=X_train.shape[2],
+                      channels=X_train.shape[3])
 
         config = CNNConfig(shape=shape,
                            classes_count=len(classes),
