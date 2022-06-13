@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import numpy as np
+import tensorflow
 from matplotlib import pyplot as plt
 from sklearn import metrics
 from sklearn.metrics import confusion_matrix
@@ -26,29 +27,43 @@ def make_report(
     numbered = [int(key) for key, value in classes.items()]
 
     # Predict probabilities for test set
-    y_pred = model.predict(X_test, verbose=0)
-    #Get predicted labels
-    yhat_probs = np.argmax(y_pred, axis=1)
+    yhat_probs = np.argmax(model.predict(X_test, verbose=0), axis=1)
     # Compute confusion matrix data
     cm = confusion_matrix(yhat_probs, y_test_encoded)
-    plot_confusion_matrix(cm, labels)
-
+    #plot_confusion_matrix(cm, labels)
 
     # Find per-class accuracy from the confusion matrix data
     accuracies = acc_per_class(cm)
     df = pd.DataFrame({
-        'CLASS': labels,
-        'ACCURACY': accuracies
+        'КЛАСС': labels,
+        'ТОЧНОСТЬ': accuracies
     }).sort_values(by="ACCURACY", ascending=False)
     print(df)
 
+
+    import seaborn as sns
+    confusion_mtx = tensorflow.math.confusion_matrix(y_test_encoded, yhat_probs)
+    plt.figure(figsize=(10, 10))
+
+    sns.heatmap(confusion_mtx,
+                xticklabels=labels,
+                yticklabels=labels,
+                annot=True, fmt='g')
+    plt.xlabel('Прогноз')
+    plt.ylabel('Метка')
+    fig, ax = plt.subplots(figsize=(10,10))
+    im = ax.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
+    ax.figure.colorbar(im, ax=ax)
+    plt.show()
 
     # Build classification report
     re = classification_report(y_test_encoded,
                                yhat_probs,
                                labels=numbered,
                                target_names=labels,
-                               zero_division=0) # suppressing warnings in case of zero predicted classes
+                               zero_division=0)  # suppressing warnings in case of zero predicted classes
+
+
     print(re)
 
 

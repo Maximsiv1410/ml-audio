@@ -1,7 +1,9 @@
 from datetime import datetime
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
+
 from tensorflow import keras
+from tensorflow.python.keras.optimizers import adam_v2
 
 import os
 import json
@@ -32,6 +34,10 @@ def fit_cnn(data_path, epochs=100, batch_size=32, model_path='cnn.hdf5'):
     X_train = X_train.reshape(X_train.shape[0], X_train.shape[1], X_train.shape[2], NUM_CHANNELS)
     X_test = X_test.reshape(X_test.shape[0], X_test.shape[1], X_test.shape[2], NUM_CHANNELS)
 
+    for entry in y_test:
+        if entry == 'police':
+            print(entry)
+
     le = LabelEncoder()
     y_test_encoded = le.fit_transform(y_test)
     y_train_encoded = le.fit_transform(y_train)
@@ -56,7 +62,7 @@ def fit_cnn(data_path, epochs=100, batch_size=32, model_path='cnn.hdf5'):
         model.compile(
             loss=keras.losses.SparseCategoricalCrossentropy(),
             metrics=['accuracy'],
-            optimizer=keras.optimizers.Adam(1e-4))
+            optimizer='adam')
 
     print(model.summary())
 
@@ -71,10 +77,5 @@ def fit_cnn(data_path, epochs=100, batch_size=32, model_path='cnn.hdf5'):
     duration = datetime.now() - start
     print("Training completed in time: ", duration)
 
-    model.save(model_path)
     make_report('cnn', model, history, classes, X_train, y_train_encoded, X_test, y_test_encoded)
-
-
-
-def predict_cnn():
-    pass
+    model.save(model_path)

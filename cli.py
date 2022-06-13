@@ -9,7 +9,7 @@ from usage import factory
               type=click.Path(exists=True),
               help="Path to the config.")
 def main(action, config):
-    if action not in ['fit', 'predict', 'transform']:
+    if action not in ['fit', 'transform']:
         raise Exception(f'Unknown action: {action}')
 
     factory_method = getattr(factory, f"do_{action}")

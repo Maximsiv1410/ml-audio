@@ -13,7 +13,13 @@ from keras.layers import (
 )
 from keras.regularizers import l2
 
+import tensorflow as tf
 
+from tensorflow.python.keras import layers, models
+
+
+
+import matplotlib.pyplot as plt
 @dataclass
 class Shape:
     rows: int
@@ -32,44 +38,55 @@ class CNNConfig:
     spatial_dropout_second_level: float
     l2_rate: float
 
+def safe(config: CNNConfig):
+    model = models.Sequential()
+
+    model.add(layers.Conv2D(32, (3, 3), activation='relu', input_shape=config.shape.to_tuple()))
+    model.add(layers.SpatialDropout2D(0.07))
+
+    model.add(layers.Conv2D(32, (3, 3), activation='relu'))
+    model.add(layers.MaxPooling2D((2, 2)))
+    model.add(layers.SpatialDropout2D(0.07))
+
+    model.add(layers.Conv2D(64, (3, 3), activation='relu'))
+    model.add(layers.MaxPooling2D((2, 2)))
+    model.add(layers.SpatialDropout2D(0.15))
+
+    model.add(layers.Conv2D(64, (3, 3), activation='relu'))
+    model.add(layers.GlobalAveragePooling2D())
+    model.add(layers.Dense(config.classes_count, activation='softmax'))
+
+    return model
+
+
 
 def get_model(config: CNNConfig):
-    """ too heavy model, needs to be refined """
-    model = Sequential()
+    model = models.Sequential()
 
-    model.add(Conv2D(filters=32,
-                     kernel_size=(3, 3),
-                     kernel_regularizer=l2(config.l2_rate),
-                     input_shape=config.shape.to_tuple()))
-    model.add(LeakyReLU(alpha=0.1))
+    kernel_size = (3, 3)
+
+    model.add(layers.Conv2D(32, kernel_size, activation='relu', input_shape=config.shape.to_tuple()))
     model.add(BatchNormalization())
 
-    model.add(SpatialDropout2D(config.spatial_dropout_first_level))
-
-    model.add(Conv2D(filters=32,
-                     kernel_size=(3, 3),
-                     kernel_regularizer=l2(config.l2_rate)))
-    model.add(LeakyReLU(alpha=0.1))
+    model.add(layers.SpatialDropout2D(0.07))
+    model.add(layers.Conv2D(32, kernel_size, activation='relu'))
     model.add(BatchNormalization())
 
-    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(layers.MaxPooling2D((2, 2)))
 
-    model.add(SpatialDropout2D(config.spatial_dropout_first_level))
-    model.add(Conv2D(filters=64,
-                     kernel_size=(3, 3),
-                     kernel_regularizer=l2(config.l2_rate)))
-    model.add(LeakyReLU(alpha=0.1))
+    model.add(layers.SpatialDropout2D(0.07))
+    model.add(layers.Conv2D(64, kernel_size, activation='relu'))
     model.add(BatchNormalization())
 
-    model.add(SpatialDropout2D(config.spatial_dropout_second_level))
-    model.add(Conv2D(filters=64,
-                     kernel_size=(3, 3),
-                     kernel_regularizer=l2(config.l2_rate)))
-    model.add(LeakyReLU(alpha=0.1))
+    model.add(layers.MaxPooling2D((2, 2)))
+
+    model.add(layers.SpatialDropout2D(0.15))
+    model.add(layers.Conv2D(64, kernel_size, activation='relu'))
     model.add(BatchNormalization())
 
-    model.add(GlobalAveragePooling2D())
+    model.add(layers.GlobalAveragePooling2D())
+    model.add(layers.Dense(config.classes_count, activation='softmax'))
 
-    model.add(Dense(config.classes_count, activation='softmax'))
+
 
     return model

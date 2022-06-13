@@ -23,7 +23,7 @@ def load_data(data_path):
 
     return features, labels, classes
 
-def fit_fnn(data_path, epochs=100, batch_size=32, model_path='fnn.hdf5'):
+def fit_mlp(data_path, epochs=100, batch_size=32, model_path='mlp.hdf5'):
     features, labels, classes = load_data(data_path)
     X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=.2)
 
@@ -48,6 +48,7 @@ def fit_fnn(data_path, epochs=100, batch_size=32, model_path='fnn.hdf5'):
             metrics=['accuracy'],
             optimizer=keras.optimizers.Adam(1e-4))
 
+
     print(model.summary())
 
     start = datetime.now()
@@ -62,7 +63,4 @@ def fit_fnn(data_path, epochs=100, batch_size=32, model_path='fnn.hdf5'):
     print("Training completed in time: ", duration)
 
     model.save(model_path)
-    make_report('fnn', model, history, classes, X_train, y_train_encoded, X_test, y_test_encoded)
-
-def predict_fnn():
-    pass
+    make_report('mlp', model, history, classes, X_train, y_train_encoded, X_test, y_test_encoded)

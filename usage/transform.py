@@ -7,6 +7,6 @@ def do_transform(config_path):
                     config['result_path'],
                     config['classes'],
                     int(config['target_sr']),
-                    int(config['target_duration']),
+                    float(config['target_duration']),
                     int(config['mels']))
 

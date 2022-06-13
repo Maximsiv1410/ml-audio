@@ -21,9 +21,11 @@ def load_data(data_path):
     labels = np.load(f'{data_path}/y.npy', allow_pickle=True).astype('str')
     classes = load_classes(f'{data_path}/class_map.json')
 
+    print(len(labels))
+
     return features, labels, classes
 
-def fit_rnn(data_path, epochs=100, batch_size=32, model_path='rnn.hdf5'):
+def fit_lstm(data_path, epochs=100, batch_size=32, model_path='lstm.hdf5'):
     features, labels, classes = load_data(data_path)
     X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=.2)
 
@@ -66,7 +68,5 @@ def fit_rnn(data_path, epochs=100, batch_size=32, model_path='rnn.hdf5'):
     print("Training completed in time: ", duration)
 
     #model.save(model_path)
-    make_report('rnn', model, history, classes, X_train, y_train_encoded, X_test, y_test_encoded)
+    make_report('lstm', model, history, classes, X_train, y_train_encoded, X_test, y_test_encoded)
 
-def predict_rnn():
-    pass
