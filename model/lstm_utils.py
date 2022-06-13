@@ -1,7 +1,10 @@
 import tensorflow
 from keras import Sequential
 from keras.layers import CuDNNLSTM, ELU, Bidirectional, LSTM
-from tensorflow.python.keras.layers import Dropout, Dense, Attention
+
+from keras.layers import (
+    Dense, Dropout
+)
 
 
 def get_model(shape, n_classes: int):
@@ -12,6 +15,5 @@ def get_model(shape, n_classes: int):
     model.add(Dropout(0.2))
     model.add(Dense(n_classes, activation='softmax'))
 
-    model.summary()
 
     return model

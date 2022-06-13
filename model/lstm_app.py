@@ -1,4 +1,7 @@
+from collections import defaultdict
 from datetime import datetime
+
+import visualkeras
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from tensorflow import keras
@@ -7,7 +10,7 @@ import os
 import json
 import numpy as np
 
-from model.recurrent.utils import get_model
+from model.lstm_utils import *
 from core.report import make_report
 
 
@@ -53,6 +56,12 @@ def fit_lstm(data_path, epochs=100, batch_size=32, model_path='lstm.hdf5'):
             optimizer=keras.optimizers.Adam(1e-4))
 
         #model.build(features.shape[1:])
+
+    color_map = defaultdict(dict)
+    color_map[Dense]['fill'] = 'green'
+    color_map[LSTM]['fill'] = 'red'
+
+    visualkeras.layered_view(model, to_file='lstm_vis.png',legend=True)
 
     print(model.summary())
 

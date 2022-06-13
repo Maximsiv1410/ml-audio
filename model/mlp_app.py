@@ -1,4 +1,7 @@
+from collections import defaultdict
 from datetime import datetime
+
+import visualkeras
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from tensorflow import keras
@@ -7,7 +10,7 @@ import os
 import json
 import numpy as np
 
-from model.feedforward.utils import get_model
+from model.mlp_utils import *
 from core.report import make_report
 
 
@@ -48,6 +51,9 @@ def fit_mlp(data_path, epochs=100, batch_size=32, model_path='mlp.hdf5'):
             metrics=['accuracy'],
             optimizer=keras.optimizers.Adam(1e-4))
 
+    color_map = defaultdict(dict)
+    color_map[Dense]['fill'] = 'green'
+    visualkeras.layered_view(model, to_file='mlp_vis.png',type_ignore=[visualkeras.SpacingDummyLayer], legend=True)
 
     print(model.summary())
 

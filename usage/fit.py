@@ -2,6 +2,7 @@ from usage import factory
 
 from core.system import get_config
 
+
 def do_fit(config_path):
     config = get_config(config_path)['Fit']
 
@@ -10,7 +11,7 @@ def do_fit(config_path):
     batch_size = int(config['batch_size'])
     cooked_dataset = config['cooked_dataset']
 
-    if arch not in ['fnn', 'cnn', 'rnn']:
+    if arch not in ['mlp', 'cnn', 'lstm']:
         raise Exception(f'Unknown architecture: {arch}')
 
     factory_method = getattr(factory, f"fit_{arch}")

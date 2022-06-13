@@ -1,15 +1,18 @@
+from collections import defaultdict
 from datetime import datetime
+
+import visualkeras
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 
 from tensorflow import keras
-from tensorflow.python.keras.optimizers import adam_v2
 
 import os
 import json
 import numpy as np
 
-from model.convolutional.utils import Shape, CNNConfig, get_model
+from model.cnn_utils import *
+
 from core.report import make_report
 
 
@@ -63,6 +66,15 @@ def fit_cnn(data_path, epochs=100, batch_size=32, model_path='cnn.hdf5'):
             loss=keras.losses.SparseCategoricalCrossentropy(),
             metrics=['accuracy'],
             optimizer='adam')
+
+    color_map = defaultdict(dict)
+    color_map[Conv2D]['fill'] = 'orange'
+    color_map[SpatialDropout2D]['fill'] = 'pink'
+    color_map[MaxPooling2D]['fill'] = 'red'
+    color_map[Dense]['fill'] = 'green'
+
+    visualkeras.layered_view(model, to_file='cnn_vis.png', type_ignore=[visualkeras.SpacingDummyLayer], legend=True)
+
 
     print(model.summary())
 
